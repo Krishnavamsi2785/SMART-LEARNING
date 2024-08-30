@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Subjects - School Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #008b8b;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form input, form select {
+            padding: 10px;
+            margin: 5px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background-color: #008b8b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #006666;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #008b8b;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Register Subjects</h2>
+    <form>
+        <input type="text" id="regNumber" name="regNumber" placeholder="Reg Number"  required>
+        <input type="text" id="name" name="name" placeholder="Student Name"  required>
+        
+        <select id="subject" name="subject" required>
+            <option value="">--Select Subject--</option>
+            <option value="COM111">English</option>
+            <option value="GNS101">Science</option>
+        </select>
+        <select id="term" name="term" required>
+            <option value="">--class--</option>
+            <option value="Second Semester">6th standard</option>
+            <option value="Second Semester">7th standard</option>
+            <option value="Second Semester">8th standard</option>
+            <option value="Second Semester">9th standard</option>
+            <option value="Second Semester">10th standard</option>
+        </select>
+        
+        <div>
+            <button type="button" onclick="studentinfo()">Student Info</button>
+            <button type="button" onclick="registerSubject()">Register</button>
+            <button type="button" onclick="examRegistration()">Exam</button>
+
+
+
+        </div>
+    </form>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Subjects</th>
+                    <th>Reg No</th>
+                    <th>Class</th>
+                    <th>Term</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>COM111 - Computer Science</td>
+                    <td>MACO/2020/PHARM2</td>
+                    <td>ND</td>
+                    <td>Second Semester</td>
+                    <td><button class="delete-btn">Delete</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>GNS101 - English</td>
+                    <td>MACO/2020/PHARM2</td>
+                    <td>ND</td>
+                    <td>Second Semester</td>
+                    <td><button class="delete-btn">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function studentinfo() {
+            window.location.href = 'profile.html'; // Redirects to exam.html page
+        }
+</script>
+<script>
+    function registerSubject() {
+        alert("Subject Registered Successfully!");
+        
+    }
+    
+</script>
+<script>
+    function examRegistration() {
+        alert("You have clicked the Exam Registration button!");
+    }function examRegistration() {
+            window.location.href = 'exam1.html'; // Redirects to exam.html page
+        }
+</script>
+      
+    
+
+
+
+</body>
+</html>

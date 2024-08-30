@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Answer Page with Speech-to-Text</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .exam-container {
+            width: 80%;
+            margin: 30px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .exam-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .exam-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .student-info {
+            text-align: right;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            padding: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+            background-color: #fafafa;
+        }
+
+        .options {
+            margin-bottom: 10px;
+        }
+
+        .submit-button {
+            display: block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #391dc1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="exam-container">
+        <!-- Exam Details Section -->
+        <div class="exam-details">
+            <div class="exam-title">Exam: English - Grade 10</div>
+            <div class="student-info">
+                <p>Student: Lokesh</p>
+                <p>Exam ID: 12345</p>
+            </div>
+        </div>
+
+        <!-- English Question -->
+        <div class="question">
+            Question: Describe the main theme of the novel "To Kill a Mockingbird."
+        </div>
+
+        <!-- Writing Option -->
+        <div class="options">
+            <label>
+                <input type="radio" name="mode" value="manual" checked onclick="switchMode('manual')">
+                Manual Writing
+            </label>
+            <label>
+                <input type="radio" name="mode" value="speech" onclick="switchMode('speech')">
+                Speech-to-Text
+            </label>
+        </div>
+
+        <!-- Writing Space -->
+        <div>
+            <textarea id="answer" placeholder="Write your answer here..."></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="submit-button" onclick="submitAnswer()">Submit Answer</button>
+    </div>
+
+    <script>
+        let recognition;
+        let isSpeechMode = false;
+
+        // Initialize speech recognition
+        function initializeSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Your browser doesn't support speech recognition.");
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = false;
+            recognition.lang = "en-US";
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[event.results.length - 1][0].transcript.trim();
+                handleSpeechCommand(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error", event);
+            };
+        }
+
+        // Handle speech commands
+        function handleSpeechCommand(transcript) {
+            const textarea = document.getElementById("answer");
+            let currentText = textarea.value;
+
+            // Handle "backspace"
+            if (transcript.toLowerCase() === "backspace") {
+                textarea.value = currentText.slice(0, -1);
+            }
+            // Handle "next line"
+            else if (transcript.toLowerCase() === "next line") {
+                textarea.value += "\n";
+            }
+            // Handle "clear [word]"
+            else if (transcript.toLowerCase().startsWith("clear")) {
+                const wordToClear = transcript.slice(6).trim(); // Extract the word after "clear"
+                const regex = new RegExp(`\\b${wordToClear}\\b`, 'gi'); // Match whole word, case insensitive
+                textarea.value = currentText.replace(regex, "").replace(/\s\s+/g, ' ').trim(); // Remove word and extra spaces
+            }
+            // Default case: just add the transcript
+            else {
+                textarea.value += transcript + " ";
+            }
+        }
+
+        // Switch between manual and speech-to-text mode
+        function switchMode(mode) {
+            if (mode === 'speech') {
+                isSpeechMode = true;
+                initializeSpeechRecognition();
+                recognition.start();
+            } else {
+                isSpeechMode = false;
+                if (recognition) {
+                    recognition.stop();
+                }
+            }
+        }
+
+        // Handle answer submission
+        function submitAnswer() {
+            const answer = document.getElementById('answer').value;
+            if (answer.trim()) {
+                alert("Your answer has been submitted successfully!");
+                // Add code to submit the answer to the server
+            } else {
+                alert("Please write an answer before submitting.");
+            }
+        }
+    </script>
+</body>
+
+</html>

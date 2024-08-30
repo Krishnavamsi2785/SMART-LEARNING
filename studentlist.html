@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            width: 30px;
+        }
+
+        .header .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header .nav a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .header .nav a:hover, .header .nav a.active {
+            background-color: #ffce00;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tabs a {
+            text-decoration: none;
+            padding: 10px 20px;
+            color: black;
+            font-weight: bold;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tabs a.active {
+            border-bottom: 2px solid #ffce00;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #f0f0f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .edit-btn, .add-credit-btn {
+            padding: 10px;
+            color: #ffce00;
+            background-color: white;
+            border: 1px solid #ffce00;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .edit-btn:hover, .add-credit-btn:hover {
+            background-color: #ffce00;
+            color: white;
+        }
+
+        .add-student-btn {
+            padding: 10px 20px;
+            color: white;
+            background-color: #ffce00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-student-btn:hover {
+            background-color: #e0b400;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="https://1.bp.blogspot.com/-j-ERWuBRTuA/YTY_6WB8QZI/AAAAAAAADig/BGAaNkvSSrESO6039J0YxMC_IfgohWZIwCLcBGAsYHQ/s570/Shazim%2Buddin%2Bpp%2Bimage%2Bwith%2Bstroke.jpg" alt="Store Logo">
+        </div>
+        <div class="nav">
+            <a href="login.html">Home</a>
+            
+           
+            <a href="#" class="active">Students</a>
+            <a href="#">Reports</a>
+            <a href="#">Configure</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Manage Student</h1>
+        <div class="tabs">
+            <a href="#" class="active">All Students</a>
+            <a href="#">Student Credit</a>
+            <a href="#">Spirit Points</a>
+            <a href="#">Upload Students</a>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <button>View Inactive Students</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>Name</th>
+                    <th>Reg number</th>
+                    <th>Student ID</th>
+                    <th>Grade</th>
+                    <th>update</th>
+                    <th>View</th>
+
+                    
+                   
+                
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>Jami LOKESH</td>
+                    <td>202</td>
+                    <td>2</td>
+                    <td><span style="color: orange;">1st gradde</span></td>
+                    <td><button class="add-credit-btn">Update details</button></td>
+                    
+                    <td><button class="edit-btn" onclick="window.location.href='student.html'">View Info</button></td>
+
+                </tr>
+                <!-- More rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
