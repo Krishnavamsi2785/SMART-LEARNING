@@ -19,6 +19,7 @@
             background-color: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .exam-details {
@@ -74,11 +75,31 @@
         .submit-button:hover {
             background-color: #391dc1;
         }
+
+        #handwritingToTextButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #handwritingToTextButton:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
     <div class="exam-container">
+        <!-- Handwriting to Text Button -->
+        <button type="button" onclick="htot()">handwriting-to-text</button>
+
         <!-- Exam Details Section -->
         <div class="exam-details">
             <div class="exam-title">Exam: English - Grade 10</div>
@@ -108,16 +129,19 @@
         <!-- Writing Space -->
         <div>
             <textarea id="answer" placeholder="Write your answer here..."></textarea>
+            <canvas id="drawingPad"></canvas>
         </div>
 
         <!-- Submit Button -->
         <button class="submit-button" onclick="submitAnswer()">Submit Answer</button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js"></script>
     <script>
         let recognition;
         let isSpeechMode = false;
-
+        let isHandwritingMode = false;
+        
         // Initialize speech recognition
         function initializeSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -180,6 +204,60 @@
             }
         }
 
+        // Set up handwriting canvas
+        function setupHandwritingCanvas() {
+            const canvas = document.getElementById('drawingPad');
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            canvas.width = 600;
+            canvas.height = 200;
+            canvas.style.display = 'block';
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000';
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            function startDrawing(e) {
+                isDrawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+                ctx.stroke();
+            }
+
+            function stopDrawing() {
+                isDrawing = false;
+                ctx.closePath();
+            }
+        }
+
+        // Convert canvas drawing to text
+        async function convertHandwritingToText() {
+            const canvas = document.getElementById('drawingPad');
+            const imageData = canvas.toDataURL('image/png');
+            Tesseract.recognize(imageData, 'eng', {
+                tessedit_char_whitelist: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                logger: info => console.log(info)
+            }).then(({ data: { text } }) => {
+                document.getElementById('answer').value = text;
+            });
+        }
+
+        // Start handwriting-to-text
+        function startHandwritingToText() {
+            setupHandwritingCanvas();
+            convertHandwritingToText();
+        }
+
         // Handle answer submission
         function submitAnswer() {
             const answer = document.getElementById('answer').value;
@@ -189,6 +267,9 @@
             } else {
                 alert("Please write an answer before submitting.");
             }
+        }
+        function htot() {
+            window.location.href = 'h-to-t.html'; // Redirects to exam.html page
         }
     </script>
 </body>
