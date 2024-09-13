@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handwriting to Text</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+        #drawingPad {
+            border: 2px solid #000;
+            width: 800px;
+            height: 600px;
+            touch-action: none; /* Prevents default touch handling on mobile */
+            background-color: #fff;
+        }
+        #controls {
+            margin-top: 10px;
+        }
+        #clearButton {
+            padding: 10px 20px;
+            background-color: #ff4a4a;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #clearButton:hover {
+            background-color: #e64343;
+        }
+        #outputText {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            width: 80%;
+            max-width: 800px;
+            min-height: 100px;
+            background-color: #fff;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="drawingPad" width="800" height="600"></canvas>
+    <div id="controls">
+        <button id="clearButton">Clear</button>
+        <button id="clearButton" onclick="submitAnsfwer('answer')">Submit</button>
+    </div>
+    <div id="outputText">Converted text will appear here...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('drawingPad');
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            // Mouse and Touch Events for Drawing
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing); // Stops drawing if mouse leaves the canvas
+
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startDrawing(e.touches[0]);
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                draw(e.touches[0]);
+            });
+            canvas.addEventListener('touchend', stopDrawing);
+
+            function startDrawing(e) {
+                isDrawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+                ctx.stroke();
+            }
+
+            function stopDrawing() {
+                isDrawing = false;
+                ctx.closePath();
+            }
+
+            // Convert Canvas Drawing to Text using Tesseract.js
+            function getCanvasImage() {
+                return canvas.toDataURL('image/png');
+            }
+
+            async function convertToText() {
+                const imageData = getCanvasImage();
+                Tesseract.recognize(
+                    imageData,
+                    'eng', // Language for OCR
+                    {
+                        logger: info => console.log(info) // Logs progress
+                    }
+                ).then(({ data: { text } }) => {
+                    document.getElementById('outputText').innerText = text;
+                });
+            }
+
+            // Automatically convert drawing to text every 2 seconds
+            setInterval(convertToText, 2000);
+
+            // Clear Button Functionality
+            document.getElementById('clearButton').addEventListener('click', function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                document.getElementById('outputText').innerText = ''; // Clear the output text
+            });
+        });
+        function submitAnswer() {
+            const answer = document.getElementById('answer').value;
+            if (answer.trim()) {
+                alert("Your answer has been submitted successfully!");
+                // Add code to submit the answer to the server
+            } else {
+                alert("Please write an answer before submitting.");
+            }
+        }
+    </script>
+</body>
+</html>
